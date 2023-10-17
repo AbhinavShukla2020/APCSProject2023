@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Game extends PApplet {
     // TODO: declare game variables
-    Player player;;
-    //Shop shop;
-    //    restaurant;
+    Player player;
+    Shop shop;
+    Restaurant restaurant;
     // ArrayList<Bullet> bullets;
     ArrayList<Monster> enemies;
 
@@ -15,8 +15,8 @@ public class Game extends PApplet {
     }
 
     public void setup() {
-//        shop= new Shop(100,100);
-//        restaurant=new Restaurant(500,100);
+        shop= new Shop(100,600,300,750);
+        restaurant=new Restaurant(500,600,700,750);
         player= new Player(50,width/2);
         enemies = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -33,9 +33,11 @@ public class Game extends PApplet {
      * tick each object (have it update itself), and draw each object
      */
     public void draw() {
+//        System.out.println("hi");
+//        text("test123",100,200,300,400);
         background(200);
-        // shop.display();
-        // restaurant.display();
+        shop.display(this);
+        restaurant.display(this);
         player.display(this);
         for(Monster m : enemies){
             m.display(this);
@@ -53,27 +55,25 @@ public class Game extends PApplet {
         }
         if (keyPressed) {
             player.move(key);
+            collision();
         }
     }
 
     public void collision(){
-      /*/  if(shop.collides(player)){
-            shop.updatePlayer(player);
+        if(shop.collides(player)){
+            shop.interact(player);
         }
         if(restaurant.collides(player)){
-            restaurant.updatePlayer(player);
+            restaurant.interact(player);
         }
-        for(Bullet b : bullets){
-            for(Monster m : enemies){
-                if(b.collides(m)){
-                    bullets.remove(b);
-                    enemies.remove(m);
-                }
-            }
-        }
-
-
-/*/
+//        for(Bullet b : bullets){
+//            for(Monster m : enemies){
+//                if(b.collides(m)){
+//                    bullets.remove(b);
+//                    enemies.remove(m);
+//                }
+//            }
+//        }
     }
 
     public static void main(String[] args) {

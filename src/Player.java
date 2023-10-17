@@ -2,13 +2,15 @@ import processing.core.PApplet;
 
 class Player {
     public int x, y;
-    public int health, hunger, money;
+    public int health, money;
     // private boolean canMove;
     private int speed = 2;
 
     public Player(int x, int y) {
         this.x = x;
         this.y = y;
+        this.health=100;
+        this.money=0;
         // canMove = true;
     }
 
