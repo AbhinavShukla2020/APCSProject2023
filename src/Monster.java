@@ -1,13 +1,15 @@
 import processing.core.PApplet;
 
 public class Monster {
-    private int x, y;
-    private int speed = 5;
+    public int x, y;
+    public int speed = 5;
+    public boolean alive;
 
 
     public Monster(int x, int y) {
         this.x = x;
         this.y = y;
+        this.alive=true;
     }
 
     public void display(PApplet circ) {
