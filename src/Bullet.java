@@ -11,8 +11,8 @@ public class Bullet {
         this.alive=true;
         this.xSpeed=xSpeed;
         this.ySpeed=ySpeed;
-        xChangeLength=(int) (xSpeed*100/Math.sqrt((xSpeed)*(xSpeed)+(ySpeed)*(ySpeed))); //Add scalin
-        yChangeLength=(int) (ySpeed*100/Math.sqrt((xSpeed)*(xSpeed)+(ySpeed)*(ySpeed)));
+        xChangeLength=(int) (xSpeed*60/Math.sqrt((xSpeed)*(xSpeed)+(ySpeed)*(ySpeed)));
+        yChangeLength=(int) (ySpeed*60/Math.sqrt((xSpeed)*(xSpeed)+(ySpeed)*(ySpeed)));
     }
     public void display(PApplet circ){
         circ.line(x,y,x+xChangeLength,y+yChangeLength);
