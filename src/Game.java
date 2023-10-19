@@ -7,6 +7,8 @@ public class Game extends PApplet {
     Player player;
     Shop shop;
     Restaurant restaurant;
+
+    double MONSTER_SPAWN_PROBABILITY=0.03;
      ArrayList<Bullet> bullets;
     ArrayList<Monster> enemies;
 
@@ -20,17 +22,11 @@ public class Game extends PApplet {
         player= new Player(50,width/2);
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 10; i++) {
             int x=(int) (Math.random()*800);
             int y=(int) (Math.random()*800);
             Monster a = new Monster(x,y);
             enemies.add(a);
-        }
-        for(int i=0;i<20;i++){
-            int x=(int) (Math.random()*800);
-            int y=(int) (Math.random()*800);
-            Bullet a = new Bullet(x,y,2,2);
-            bullets.add(a);
         }
 
     }
@@ -40,8 +36,6 @@ public class Game extends PApplet {
      * tick each object (have it update itself), and draw each object
      */
     public void draw() {
-//        System.out.println("hi");
-//        text("test123",100,200,300,400);
         background(200);
         shop.display(this);
         restaurant.display(this);
@@ -56,9 +50,23 @@ public class Game extends PApplet {
                 b.display(this);
             }
         }
+        double p=Math.random();
+        if(p<MONSTER_SPAWN_PROBABILITY){
+            int x=(int) (Math.random()*800);
+            int y=(int) (Math.random()*800);
+            Monster a = new Monster(x,y);
+            enemies.add(a);
+        }
         move();
         collision();
+        mousePressed();
+    }
 
+    public void mousePressed(){
+        if(mousePressed) {
+            Bullet a = new Bullet(player.x, player.y, (int) (10*(mouseX - player.x)/Math.sqrt(((mouseX - player.x))*(mouseX - player.x)+(mouseY - player.y)*(mouseY - player.y))), (int) (10*(mouseY - player.y)/Math.sqrt(((mouseX - player.x))*(mouseX - player.x)+(mouseY - player.y)*(mouseY - player.y))));
+            bullets.add(a);
+        }
     }
 
     public void move() {
