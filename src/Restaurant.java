@@ -6,9 +6,10 @@ public class Restaurant extends Building{
 
     }
 
-    public void interact(Player player){
-        player.health--;
+    public void interact(Player player) {
+        if (player.health < 100) {
+            player.health++;
+        }
     }
-
 
 }

@@ -1,20 +1,27 @@
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Monster {
     public int x, y;
     public int speed = 5;
     public boolean alive;
+    public PImage monster;
 
 
-    public Monster(int x, int y) {
+
+    public Monster(int x, int y, PImage mushImage) {
         this.x = x;
         this.y = y;
         this.alive=true;
+        monster = mushImage;
     }
+
+
 
     public void display(PApplet circ) {
         circ.fill(255,0,0);
         circ.ellipse(x, y, 20, 20);
+        circ.image(monster, x-10, y-10);
 
     }
 

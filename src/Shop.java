@@ -6,7 +6,9 @@ public class Shop extends Building{
 
     }
 
-    public void interact(Player player){
-
+    public void interact(Player player) {
+        if (player.health < 100) {
+            player.health++;
+        }
     }
 }
