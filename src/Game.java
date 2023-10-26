@@ -1,5 +1,4 @@
 import com.sun.javafx.sg.prism.NGImageView;
-import com.sun.tools.javac.comp.Check;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -53,13 +52,21 @@ public class Game extends PApplet {
      */
     public void draw() {
         if(startgame) {
+            MONSTER_SPAWN_PROBABILITY+=0.0001;
             fill(255, 0, 0); // Set text color to red
 
             background(200);
             image(backgroundImage, 0, 0);
             shop.display(this);
+            if(player.alive) {
+                player.display(this);
+                mousePressed();
+            }else{
+                textSize(50);
+                text("Game Over!", 250, 50);
+            }
             restaurant.display(this);
-            player.display(this);
+
             for (Monster m : enemies) {
                 if (m.alive) {
                     m.display(this);
@@ -77,11 +84,19 @@ public class Game extends PApplet {
                 Monster a = new Monster(x, y, mushroom);
                 enemies.add(a);
             }
+
+            if(player.health <= 0){
+                MONSTER_SPAWN_PROBABILITY=0;
+                enemies.clear();
+                player.alive=false;
+            }
+
             move();
             collision();
-            mousePressed();
-            textSize(32);
-            text("Health: " + player.health, 600, 50);
+            if(player.alive) {
+                textSize(32);
+                text("Health: " + player.health + "    Ammo: " + player.ammo, 350, 50);
+            }
         }
         else
         {
@@ -94,7 +109,8 @@ public class Game extends PApplet {
 
 
     public void mousePressed(){
-        if(mousePressed) {
+        if(mousePressed && player.ammo>0 && player.alive) {
+            player.ammo--;
             Bullet a = new Bullet(player.x, player.y, (int) (10*(mouseX - player.x)/Math.sqrt(((mouseX - player.x))*(mouseX - player.x)+(mouseY - player.y)*(mouseY - player.y))), (int) (10*(mouseY - player.y)/Math.sqrt(((mouseX - player.x))*(mouseX - player.x)+(mouseY - player.y)*(mouseY - player.y))));
             bullets.add(a);
         }
@@ -115,10 +131,6 @@ public class Game extends PApplet {
                 b.move();
             }
         }
-     /*/   if (keyPressed) {
-           // System.out.println(key);
-            player.move(keyCode);
-        } /*/
     }
 
     public void collision(){
@@ -143,7 +155,7 @@ public class Game extends PApplet {
 
         //Player - monster collision detection
         for (Monster m : enemies) {
-            if (m.alive && player.x >= m.x - 40 && player.x <= m.x + 40 && player.y >= m.y - 40 && player.y <= m.y + 40) {
+            if (m.alive && player.x >= m.x - 40 && player.x <= m.x + 40 && player.y >= m.y - 40 && player.y <= m.y + 40 && player.health>0) {
                 player.health--;
             }
         }

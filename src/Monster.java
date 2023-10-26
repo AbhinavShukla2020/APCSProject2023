@@ -3,7 +3,7 @@ import processing.core.PImage;
 
 public class Monster {
     public int x, y;
-    public int speed = 5;
+    public int speed = 7;
     public boolean alive;
     public PImage monster;
 
