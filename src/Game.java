@@ -1,14 +1,20 @@
 import processing.core.PApplet;
 import processing.core.PImage;
 
+
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-
-
+import java.util.Arrays;
 
 
 public class Game extends PApplet {
     // TODO: declare game variables
     Player player;
+//    Minim loader;
     Hospital hospital;
     boolean startgame = false;
     Shop shop;
@@ -22,6 +28,138 @@ public class Game extends PApplet {
         size(800, 800);   // set the window size
     }
 
+
+
+    public static void writeDataToFile(String filePath, String data) throws IOException {
+        try (FileWriter f = new FileWriter(filePath);
+             BufferedWriter b = new BufferedWriter(f);
+             PrintWriter writer = new PrintWriter(b);) {
+
+
+            writer.println(data);
+
+
+        } catch (IOException error) {
+            System.err.println("There was a problem writing to the file: " + filePath);
+            error.printStackTrace();
+        }
+    }
+
+    public static String readFile(String fileName) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(fileName)));
+    }
+
+
+    public void updateFile() throws IOException {
+        String filePath="src/SavedGameFile";
+        File file = new File(filePath);
+        file.delete();
+        file.createNewFile();
+        String write="";
+        write+=player.x+"\n";
+        write+=player.y+"\n";
+        write+=player.health+"\n";
+        write+=player.ammo+"\n";
+
+        for(Bullet i : bullets){
+            write+=i.x+"\n";
+            write+=i.y+"\n";
+            write+=i.xSpeed+"\n";
+            write+=i.ySpeed+"\n";
+        }
+        write+="MONSTERS\n";
+        for(Monster i : enemies){
+            if(i.alive) {
+                write+=i.x+"\n";
+                write+=i.y+"\n";
+            }
+        }
+        writeDataToFile(filePath,write);
+    }
+
+    public void updateGameFromFile() throws IOException {
+        String filePath="src/SavedGameFile";
+        String data=readFile(filePath);
+        try {
+            System.out.println("hi");
+            enemies.clear();
+            bullets.clear();
+            BufferedReader in = new BufferedReader(new FileReader(filePath));
+
+            String line;
+            int cnt=0;
+
+            int curBullX=0,curBullY=0,curBullXSpeed=0,curBullYSpeed=0;
+            int curMonsterX=0,curMonsterY=0;
+            boolean curBullet=true;
+            boolean curMonsX=true;
+            while((line = in.readLine())!=null){
+                if(line.equals("")){
+                    continue;
+                }
+                if(cnt==0){
+                    System.out.println("hi");
+                    player.x=Integer.parseInt(line);
+                    cnt++;
+                    continue;
+                }
+                if(cnt==1){
+                    player.y=Integer.parseInt(line);
+                    cnt++;
+                    continue;
+                }
+                if(cnt==2){
+                    player.health=100;
+                    cnt++;
+                    continue;
+                }
+                if(cnt==3){
+                    player.ammo=Integer.parseInt(line);
+                    cnt++;
+                    continue;
+                }
+                if(curBullet){
+                    if(line.equals("MONSTERS")){
+                        curBullet=false;
+                        cnt++;
+                        continue;
+                    }
+                    if((cnt%4)==0){
+                        curBullX=Integer.parseInt(line);
+                    }
+                    if((cnt%4)==1){
+                        curBullY=Integer.parseInt(line);
+                    }
+                    if((cnt%4)==2){
+                        curBullXSpeed=Integer.parseInt(line);
+                    }
+                    if((cnt%4)==3){
+                        curBullYSpeed=Integer.parseInt(line);
+                        Bullet newBullet = new Bullet(curBullX,curBullY,curBullXSpeed,curBullYSpeed);
+                        bullets.add(newBullet);
+                    }
+                    cnt++;
+                }
+                if(!curBullet){
+                    if(curMonsX){
+                        curMonsterX=Integer.parseInt(line);
+                        curMonsX=false;
+                    }else{
+                        curMonsterY=Integer.parseInt(line);
+                        Monster curMonster=new Monster(curMonsterX,curMonsterY,mushroom);
+                        enemies.add(curMonster);
+                        curMonsX=true;
+                    }
+                    cnt++;
+                }
+            }
+            in.close();
+        }catch (IOException e) {
+            System.out.println("hi3");
+            throw new RuntimeException(e);
+        }
+
+    }
     public void setup() {
 
         backgroundImage = loadImage("BGImage.png");
@@ -34,19 +172,34 @@ public class Game extends PApplet {
         start.resize(200,100);
 
 
+//        loader = new Minim(this);
+//        song = loader.loadFile("Alien Attack.mp3");
+//        song.play();
 
-        backgroundImage.resize(800,800);
-        hospital= new Hospital(100,600,300,750);
-        shop=new Shop(500,600,700,750);
-        player= new Player(50,width/2, mario );
+        File file = new File("src/SavedGameFile");
+        backgroundImage.resize(800, 800);
+        hospital = new Hospital(100, 600, 300, 750);
+        shop = new Shop(500, 600, 700, 750);
+        player = new Player(50, width / 2, mario);
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            int x=(int) (Math.random()*800);
-            int y=(int) (Math.random()*800);
-            Monster a = new Monster(x,y,mushroom);
-            enemies.add(a);
+        if(file.length()==0) {
+
+        }else {
+//        for (int i = 0; i < 10; i++) {
+//            int x=(int) (Math.random()*800);
+//            int y=(int) (Math.random()*800);
+//            Monster a = new Monster(x,y,mushroom);
+//            enemies.add(a);
+//        }
+            try {
+                updateGameFromFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
+
 
     }
 
@@ -106,6 +259,11 @@ public class Game extends PApplet {
             fill(0, 408, 612);
             text("Hospital", 142, 690);
             text("Shop", 560, 690);
+            try {
+                updateFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         else
         {
@@ -127,6 +285,11 @@ public class Game extends PApplet {
         {
             startgame = true;
         }
+        try {
+            updateFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void move() {
@@ -139,6 +302,11 @@ public class Game extends PApplet {
             if(b.alive) {
                 b.move();
             }
+        }
+        try {
+            updateFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -168,12 +336,22 @@ public class Game extends PApplet {
                 player.health--;
             }
         }
+        try {
+            updateFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void keyPressed() {
         int kC = keyCode;
         if (kC != 0) {
             player.move(kC);
+        }
+        try {
+            updateFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
