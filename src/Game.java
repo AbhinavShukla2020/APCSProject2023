@@ -1,5 +1,7 @@
+import ddf.minim.AudioPlayer;
 import processing.core.PApplet;
 import processing.core.PImage;
+import ddf.minim.Minim;
 
 import java.util.ArrayList;
 
@@ -8,11 +10,13 @@ import java.util.ArrayList;
 
 public class Game extends PApplet {
     // TODO: declare game variables
+    Minim loader;
     Player player;
     Hospital hospital;
     boolean startgame = false;
     Shop shop;
     PImage backgroundImage, mario, mushroom,startbg, start;
+    AudioPlayer song;
 
     double MONSTER_SPAWN_PROBABILITY=0.03;
     ArrayList<Bullet> bullets;
@@ -32,6 +36,10 @@ public class Game extends PApplet {
         mushroom.resize(20,20);
         startbg.resize(800,800);
         start.resize(200,100);
+
+        loader = new Minim(this);
+        song = loader.loadFile("01. Ground Theme.mp3");
+        song.play();
 
 
 
