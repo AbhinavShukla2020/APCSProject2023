@@ -26,10 +26,6 @@ public class Monster {
     }
 
     public void move() {
-        int max = 5; int min = 2;
-
-
-
         boolean moved=false;
         while(moved==false){
             int val=(int) (Math.random()*4);
@@ -37,9 +33,8 @@ public class Monster {
             if(val==0){
                 if((x+speed)<=800) {
                     this.x += speed;
-                    moved=true;
+                    moved = true;
                 }
-
             }
             if(val == 1 ) {
                 if((x-speed)>=0) {

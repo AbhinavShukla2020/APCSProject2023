@@ -12,7 +12,6 @@ public class Building {
     }
 
     public boolean collides(Player player){
-//        System.out.println("in method");
         if(player.x>=Math.min(x1,x2) && player.x<=Math.max(x1,x2) && player.y>=Math.min(y1,y2) && player.y<=Math.max(y1,y2)){
             return true;
         }

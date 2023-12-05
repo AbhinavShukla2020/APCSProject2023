@@ -1,16 +1,17 @@
-import com.sun.javafx.sg.prism.NGImageView;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+
+
+
 
 public class Game extends PApplet {
     // TODO: declare game variables
     Player player;
-    Shop shop;
+    Hospital hospital;
     boolean startgame = false;
-    Restaurant restaurant;
+    Shop shop;
     PImage backgroundImage, mario, mushroom,startbg, start;
 
     double MONSTER_SPAWN_PROBABILITY=0.03;
@@ -22,6 +23,7 @@ public class Game extends PApplet {
     }
 
     public void setup() {
+
         backgroundImage = loadImage("BGImage.png");
         startbg = loadImage("StartBG.png");
         start = loadImage("Start.png");
@@ -31,9 +33,11 @@ public class Game extends PApplet {
         startbg.resize(800,800);
         start.resize(200,100);
 
+
+
         backgroundImage.resize(800,800);
-        shop= new Shop(100,600,300,750);
-        restaurant=new Restaurant(500,600,700,750);
+        hospital= new Hospital(100,600,300,750);
+        shop=new Shop(500,600,700,750);
         player= new Player(50,width/2, mario );
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
@@ -52,12 +56,13 @@ public class Game extends PApplet {
      */
     public void draw() {
         if(startgame) {
+
             MONSTER_SPAWN_PROBABILITY+=0.0001;
             fill(255, 0, 0); // Set text color to red
 
             background(200);
             image(backgroundImage, 0, 0);
-            shop.display(this);
+            hospital.display(this);
             if(player.alive) {
                 player.display(this);
                 mousePressed();
@@ -65,7 +70,7 @@ public class Game extends PApplet {
                 textSize(50);
                 text("Game Over!", 250, 50);
             }
-            restaurant.display(this);
+            shop.display(this);
 
             for (Monster m : enemies) {
                 if (m.alive) {
@@ -97,11 +102,15 @@ public class Game extends PApplet {
                 textSize(32);
                 text("Health: " + player.health + "    Ammo: " + player.ammo, 350, 50);
             }
+            textSize(30);
+            fill(0, 408, 612);
+            text("Hospital", 142, 690);
+            text("Shop", 560, 690);
         }
         else
         {
             image(startbg, 0, 0);
-            image(start, 300, 600);
+            image(start, 300, 560);
 
         }
 
@@ -134,11 +143,11 @@ public class Game extends PApplet {
     }
 
     public void collision(){
+        if(hospital.collides(player)){
+            hospital.interact(player);
+        }
         if(shop.collides(player)){
             shop.interact(player);
-        }
-        if(restaurant.collides(player)){
-            restaurant.interact(player);
         }
 
         //bullet - monster collision detection
