@@ -1,4 +1,5 @@
 import ddf.minim.AudioPlayer;
+import gifAnimation.Gif;
 import processing.core.PApplet;
 import processing.core.PImage;
 import ddf.minim.Minim;
@@ -17,7 +18,7 @@ public class Game extends PApplet {
     // TODO: declare game variables
     Minim loader;
     Player player;
-//    Minim loader;
+    Gif bg1;
     Hospital hospital;
     boolean startgame = false;
     Shop shop;
@@ -179,6 +180,7 @@ public class Game extends PApplet {
         song = loader.loadFile("01. Ground Theme.mp3");
         song.play();
 
+        bg1 = new Gif(this, "endScreenMario.gif");
 
 //        loader = new Minim(this);
 //        song = loader.loadFile("Alien Attack.mp3");
@@ -230,6 +232,11 @@ public class Game extends PApplet {
             }else{
                 textSize(50);
                 text("Game Over!", 250, 50);
+               // bg1.resize(700,700);
+                image(bg1,0,0);
+                bg1.play();
+                //
+                //bg1.play();
             }
             shop.display(this);
 
