@@ -1,12 +1,15 @@
 import ddf.minim.AudioPlayer;
-import gifAnimation.Gif;
 import processing.core.PApplet;
 import processing.core.PImage;
 import ddf.minim.Minim;
+import gifAnimation.Gif;
 
 
-
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -18,10 +21,11 @@ public class Game extends PApplet {
     // TODO: declare game variables
     Minim loader;
     Player player;
-    Gif bg1;
+//    Minim loader;
     Hospital hospital;
     boolean startgame = false;
     Shop shop;
+    Gif bg1;
     PImage backgroundImage, mario, mushroom,startbg, start;
     AudioPlayer song;
 
@@ -175,12 +179,12 @@ public class Game extends PApplet {
         mushroom.resize(20,20);
         startbg.resize(800,800);
         start.resize(200,100);
+        bg1 = new Gif(this, "ezgif.com-resize.gif");
 
         loader = new Minim(this);
         song = loader.loadFile("01. Ground Theme.mp3");
         song.play();
 
-        bg1 = new Gif(this, "endScreenMario.gif");
 
 //        loader = new Minim(this);
 //        song = loader.loadFile("Alien Attack.mp3");
@@ -226,28 +230,30 @@ public class Game extends PApplet {
             background(200);
             image(backgroundImage, 0, 0);
             hospital.display(this);
+            shop.display(this);
             if(player.alive) {
                 player.display(this);
                 mousePressed();
             }else{
-                bullets.clear();
-                enemies.clear();
-                player.health=100;
-                player.ammo=100;
-                try {
-                    updateFile();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                textSize(50);
-                text("Game Over!", 250, 50);
-               // bg1.resize(700,700);
                 image(bg1,0,0);
                 bg1.play();
-                //
-                //bg1.play();
+                fill(173,216,230);
+                rect(250,690,300,50);
+                fill(0);
+                text("Restart", 310,730);
+                textSize(25);
+                if(mousePressed && (mouseX > 250 && mouseX < 460 && mouseY > 690 && mouseY < 740)) {
+                    startgame = true;
+                    player.alive = true;
+                    player.health= 100;
+                    player.ammo = 100;
+
+                }
+                return;
+
+
             }
-            shop.display(this);
+
 
             for (Monster m : enemies) {
                 if (m.alive) {
