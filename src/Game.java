@@ -220,7 +220,7 @@ public class Game extends PApplet {
     public void draw() {
         if(startgame) {
 
-            MONSTER_SPAWN_PROBABILITY+=0.0001;
+            MONSTER_SPAWN_PROBABILITY+=0.00005;
             fill(255, 0, 0); // Set text color to red
 
             background(200);
@@ -230,6 +230,15 @@ public class Game extends PApplet {
                 player.display(this);
                 mousePressed();
             }else{
+                bullets.clear();
+                enemies.clear();
+                player.health=100;
+                player.ammo=100;
+                try {
+                    updateFile();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 textSize(50);
                 text("Game Over!", 250, 50);
                // bg1.resize(700,700);
@@ -310,7 +319,7 @@ public class Game extends PApplet {
     public void move() {
         for(Monster m : enemies){
             if(m.alive) {
-                m.move();
+                m.move(player);
             }
         }
         for(Bullet b : bullets){

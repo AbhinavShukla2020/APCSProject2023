@@ -10,7 +10,7 @@ class Player {
 
     public PImage mario;
     // private boolean canMove;
-    private int speed = 10;
+    private int speed =20;
 
     public Player(int x, int y, PImage marioImage) {
         this.x = x;
