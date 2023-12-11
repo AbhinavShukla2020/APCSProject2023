@@ -181,7 +181,8 @@ public class Game extends PApplet {
         song.play();
 
         bg1 = new Gif(this, "endScreenMario.gif");
-
+       // bg1.resize(800, 800);
+        bg1.play();
 //        loader = new Minim(this);
 //        song = loader.loadFile("Alien Attack.mp3");
 //        song.play();
@@ -230,13 +231,24 @@ public class Game extends PApplet {
                 player.display(this);
                 mousePressed();
             }else{
-                textSize(50);
-                text("Game Over!", 250, 50);
+                //textSize(50);
+                //text("Game Over!", 250, 50);
                // bg1.resize(700,700);
-                image(bg1,0,0);
-                bg1.play();
-                //
-                //bg1.play();
+                image(bg1,150,150);
+                fill(173,216,230);
+                rect(250,690,300,50);
+                fill(0);
+                text("Restart", 310,730);
+                textSize(25);
+                if(mousePressed && (mouseX > 250 && mouseX < 460 && mouseY > 690 && mouseY < 740)) {
+                    startgame = true;
+                    player.alive = true;
+                    player.health= 100;
+                    player.ammo = 100;
+
+                }
+
+
             }
             shop.display(this);
 
