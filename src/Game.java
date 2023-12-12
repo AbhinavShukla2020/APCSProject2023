@@ -1,12 +1,15 @@
 import ddf.minim.AudioPlayer;
-import gifAnimation.Gif;
 import processing.core.PApplet;
 import processing.core.PImage;
 import ddf.minim.Minim;
+import gifAnimation.Gif;
 
 
-
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -18,11 +21,12 @@ public class Game extends PApplet {
     // TODO: declare game variables
     Minim loader;
     Player player;
-    Gif bg1;
+//    Minim loader;
     Hospital hospital;
     boolean startgame = false;
     Shop shop;
-    PImage backgroundImage, mario, mushroom,startbg, start;
+    Gif bg1;
+    PImage backgroundImage, mario, mushroom,startbg, start, hospitalImg, shopImg;
     AudioPlayer song;
 
     double MONSTER_SPAWN_PROBABILITY=0.03;
@@ -172,25 +176,28 @@ public class Game extends PApplet {
         start = loadImage("Start.png");
         mario = loadImage("SuperMario.png");
         mushroom = loadImage("Mushroom.png");
+        hospitalImg = loadImage("HospitalBackgroundRemoved.png");
+        shopImg = loadImage("ammoShop.png");
+        hospitalImg.resize(200,150);
+        shopImg.resize(200,150);
         mushroom.resize(20,20);
         startbg.resize(800,800);
         start.resize(200,100);
+        bg1 = new Gif(this, "ezgif.com-resize.gif");
 
         loader = new Minim(this);
         song = loader.loadFile("01. Ground Theme.mp3");
         song.play();
 
-        bg1 = new Gif(this, "endScreenMario.gif");
-       // bg1.resize(800, 800);
-        bg1.play();
+
 //        loader = new Minim(this);
 //        song = loader.loadFile("Alien Attack.mp3");
 //        song.play();
 
         File file = new File("src/SavedGameFile");
         backgroundImage.resize(800, 800);
-        hospital = new Hospital(100, 600, 300, 750);
-        shop = new Shop(500, 600, 700, 750);
+        hospital = new Hospital(180, 560, 300, 750);
+        shop = new Shop(550, 560, 700, 750);
         player = new Player(50, width / 2, mario);
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
@@ -221,24 +228,24 @@ public class Game extends PApplet {
     public void draw() {
         if(startgame) {
 
-            MONSTER_SPAWN_PROBABILITY+=0.0001;
+            MONSTER_SPAWN_PROBABILITY+=0.00005;
             fill(255, 0, 0); // Set text color to red
 
             background(200);
             image(backgroundImage, 0, 0);
-            hospital.display(this);
+            hospital.display(this,hospitalImg);
+            shop.display(this,shopImg);
             if(player.alive) {
                 player.display(this);
                 mousePressed();
             }else{
-                //textSize(50);
-                //text("Game Over!", 250, 50);
-               // bg1.resize(700,700);
-                image(bg1,150,150);
+                image(bg1,0,0);
+                bg1.play();
+
                 fill(173,216,230);
                 rect(250,690,300,50);
                 fill(0);
-                text("Restart", 310,730);
+                text("Restart", 360,720);
                 textSize(25);
                 if(mousePressed && (mouseX > 250 && mouseX < 460 && mouseY > 690 && mouseY < 740)) {
                     startgame = true;
@@ -247,10 +254,11 @@ public class Game extends PApplet {
                     player.ammo = 100;
 
                 }
+                return;
 
 
             }
-            shop.display(this);
+
 
             for (Monster m : enemies) {
                 if (m.alive) {
@@ -284,8 +292,8 @@ public class Game extends PApplet {
             }
             textSize(30);
             fill(0, 408, 612);
-            text("Hospital", 142, 690);
-            text("Shop", 560, 690);
+//            text("Hospital", 142, 690);
+//            text("Shop", 560, 690);
             try {
                 updateFile();
             } catch (IOException e) {
@@ -322,7 +330,7 @@ public class Game extends PApplet {
     public void move() {
         for(Monster m : enemies){
             if(m.alive) {
-                m.move();
+                m.move(player);
             }
         }
         for(Bullet b : bullets){

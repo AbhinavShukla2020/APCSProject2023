@@ -1,4 +1,7 @@
+import ddf.minim.AudioPlayer;
 import processing.core.PApplet;
+import processing.core.PImage;
+
 public class Building {
     public int x,y;
     public int width,length;
@@ -22,7 +25,9 @@ public class Building {
 
     }
 
-    public void display(PApplet circ) {
-        circ.rect(Math.min(x1,x2),Math.min(y1,y2),Math.max(x1,x2)-Math.min(x1,x2),Math.max(y1,y2)-Math.min(y1,y2));
+    public void display(PApplet circ, PImage image2) {
+        //circ.rect(Math.min(x1,x2),Math.min(y1,y2),Math.max(x1,x2)-Math.min(x1,x2),Math.max(y1,y2)-Math.min(y1,y2));
+        circ.image(image2,Math.min(x1,x2),Math.min(y1,y2));
+
     }
 }
