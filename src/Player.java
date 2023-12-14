@@ -9,7 +9,6 @@ class Player {
     public boolean alive;
 
     public PImage mario;
-    // private boolean canMove;
     private int speed =20;
 
     public Player(int x, int y, PImage marioImage) {
@@ -22,10 +21,8 @@ class Player {
     }
 
 
-
     public void display(PApplet circ) {
         circ.fill(255,255,0);
-        //circ.ellipse(x, y, 100, 100);
         circ.image(mario, x-190, y-90);
     }
 
@@ -43,9 +40,5 @@ class Player {
         }
     }
 
-
-
-
-    // Check for collisions with walls
 
 }

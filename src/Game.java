@@ -90,7 +90,6 @@ public class Game extends PApplet {
         String filePath="src/SavedGameFile";
         String data=readFile(filePath);
         try {
-            System.out.println("hi");
             enemies.clear();
             bullets.clear();
             BufferedReader in = new BufferedReader(new FileReader(filePath));
@@ -107,7 +106,6 @@ public class Game extends PApplet {
                     continue;
                 }
                 if(cnt==0){
-                    System.out.println("hi");
                     player.x=Integer.parseInt(line);
                     cnt++;
                     continue;
@@ -164,7 +162,6 @@ public class Game extends PApplet {
             }
             in.close();
         }catch (IOException e) {
-            System.out.println("hi3");
             throw new RuntimeException(e);
         }
 
@@ -189,11 +186,6 @@ public class Game extends PApplet {
         song = loader.loadFile("01. Ground Theme.mp3");
         song.play();
 
-
-//        loader = new Minim(this);
-//        song = loader.loadFile("Alien Attack.mp3");
-//        song.play();
-
         File file = new File("src/SavedGameFile");
         backgroundImage.resize(800, 800);
         hospital = new Hospital(180, 560, 300, 750);
@@ -204,12 +196,7 @@ public class Game extends PApplet {
         if(file.length()==0) {
 
         }else {
-//        for (int i = 0; i < 10; i++) {
-//            int x=(int) (Math.random()*800);
-//            int y=(int) (Math.random()*800);
-//            Monster a = new Monster(x,y,mushroom);
-//            enemies.add(a);
-//        }
+
             try {
                 updateGameFromFile();
             } catch (IOException e) {
@@ -292,8 +279,6 @@ public class Game extends PApplet {
             }
             textSize(30);
             fill(0, 408, 612);
-//            text("Hospital", 142, 690);
-//            text("Shop", 560, 690);
             try {
                 updateFile();
             } catch (IOException e) {

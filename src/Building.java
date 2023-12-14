@@ -26,7 +26,6 @@ public class Building {
     }
 
     public void display(PApplet circ, PImage image2) {
-        //circ.rect(Math.min(x1,x2),Math.min(y1,y2),Math.max(x1,x2)-Math.min(x1,x2),Math.max(y1,y2)-Math.min(y1,y2));
         circ.image(image2,Math.min(x1,x2),Math.min(y1,y2));
 
     }
